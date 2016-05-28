@@ -10,4 +10,4 @@ obj/%.o: src/%.cpp
 	g++ $(CC_FLAGS) -o $@ $<
 
 clean:
-	rm obj/*.o
+	rm -fr obj
