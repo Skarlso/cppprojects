@@ -1,0 +1,25 @@
+# OBJS = Exer.o Uninit.o
+CC = g++
+DEBUG = -g
+CFLAGS = -Wall -c $(DEBUG)
+LFLAGS = -Wall $(DEBUG)
+
+p1: Exer.o
+	$(CC) $(CFLAGS) exer.cpp -o exer.o
+
+p2: Uninit.o
+	$(CC) $(CFLAGS) uninit.cpp -o exer.o
+
+Exer.o : exer.cpp
+    $(CC) $(CFLAGS) exer.cpp
+
+Uninit.o : uninit.cpp
+    $(CC) $(CFLAGS) uninit.cpp
+
+clean:
+    \rm *.o
+
+all: p1 p2
+# tar:
+#     tar cfv p1.tar Movie.h Movie.cpp Name.h Name.cpp NameList.h \
+#             NameList.cpp  Iterator.cpp Iterator.h
