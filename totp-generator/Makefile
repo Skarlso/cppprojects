@@ -1,8 +1,8 @@
 #------------------------------------------------------------------------------
-CFLAGS=-g -c -Wall -std=c++0x -stdlib=libc++ -pthread
+CFLAGS=-g -Wall -std=c++11 -stdlib=libc++ -pthread
 SOURCE=src/totp.cpp
 MYPROGRAM=totp
-MYINCLUDES=lib
+MYLIBS=lib
 MYLINKS=cryptopp
 CC=g++
 #------------------------------------------------------------------------------
@@ -10,7 +10,8 @@ CC=g++
 all: $(MYPROGRAM)
 
 $(MYPROGRAM): $(SOURCE)
-	$(CC) $(CFLAGS) -I$(MYINCLUDES) $(SOURCE) -o$(MYPROGRAM) -l$(MYLINKS) -std=c++11
+	$(CC) $(CFLAGS) -L$(MYLIBS) $(SOURCE) -o$(MYPROGRAM) -l$(MYLINKS)
 
 clean:
 	rm -f $(MYPROGRAM)
+	rm -fr $(MYPROGRAM).*
