@@ -5,7 +5,10 @@
 #include <string>
 #include <sstream>
 #include <vector>
-#define is_triangle(a, b, c) (a + b > c && a + c > b && b + c > a)
+
+inline bool is_triangle(int a, int b, int c) {
+    return (a + b > c && a + c > b && b + c > a);
+}
 
 int count_valid_triangles(std::vector<int> col) {
     int valid = 0;
