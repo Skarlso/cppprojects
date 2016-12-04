@@ -8,11 +8,7 @@
 #include <map>
 
 bool cmp(const std::pair<char, int>  &p1, const std::pair<char, int> &p2) {
-    if (p1.second == p2.second) {
-        return p1.first < p2.first;
-    } else {
-        return p1.second > p2.second;
-    }
+    return p1.second == p2.second ? p1.first < p2.first : p1.second > p2.second;
 }
 
 std::string extract_five_most_commond_letters(std::map<char, int> letters) {
