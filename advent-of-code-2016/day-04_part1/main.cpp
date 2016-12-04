@@ -45,7 +45,6 @@ std::map<char, int> extract_letter_count(std::string str) {
     std::map<char, int> ret;
     str = str.substr(0, str.find_last_of("-"));
     for (char& c : str) {
-        // Counting number of letter occurances
         if (c != '-') {
             ret[c]++;
         }
@@ -59,12 +58,9 @@ int main(int argc, char* argv[]) {
     int valid_count = 0;
     while (std::getline(file, str)) {
         boost::trim(str);
-        // Extracting what letters are needed by getting the last element
-        // Regex didn't work. Falling back to substring of some weird architecture error... :/
         std::string needed_letters = extract_needed_letters(str);
         int id = extract_id(str);
         std::map <char, int> letters = extract_letter_count(str);
-        // Extracting 5 most commond letters in alphabetical order
         std::string common = extract_five_most_commond_letters(letters);
         if (common == needed_letters) {
             valid_count += id;
