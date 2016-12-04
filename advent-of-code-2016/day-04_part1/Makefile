@@ -1,5 +1,5 @@
 CC= g++
-CFLAGS= -g -c -Wall -std=c++0x -stdlib=libc++ 
+CFLAGS= -g -c -Wall -std=c++14 -stdlib=libc++ 
 LDFLAGS=
 SOURCES= main.cpp
 INCLUDES= -I.

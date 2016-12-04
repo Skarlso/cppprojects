@@ -7,15 +7,13 @@
 #include <vector>
 #include <map>
 
-bool cmp(const std::pair<char, int>  &p1, const std::pair<char, int> &p2) {
-    return p1.second == p2.second ? p1.first < p2.first : p1.second > p2.second;
-}
-
 std::string extract_five_most_commond_letters(std::map<char, int> letters) {
     std::string common = "";
     std::vector<std::pair<char, int>> v;
     std::copy(letters.begin(), letters.end(), std::back_inserter(v));
-    std::sort(v.begin(), v.end(), cmp);
+    std::sort(v.begin(), v.end(), [](auto p1, auto p2){
+        return p1.second == p2.second ? p1.first < p2.first : p1.second > p2.second;
+    });
     for (std::vector<std::pair<char,int>>::iterator it=v.begin(); it!=v.end(); ++it) {
         common += it->first;
     }
