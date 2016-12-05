@@ -20,7 +20,6 @@
 CFLAGS=-g -Wall -std=c++14 -stdlib=libc++ -pthread
 SOURCE=main.cpp
 MYPROGRAM=solution
-MYLIBS=.
 MYLINKS=cryptopp
 CC=g++
 #------------------------------------------------------------------------------
@@ -28,7 +27,7 @@ CC=g++
 all: $(MYPROGRAM)
 
 $(MYPROGRAM): $(SOURCE)
-	$(CC) $(CFLAGS) -L$(MYLIBS) $(SOURCE) -o$(MYPROGRAM) -l$(MYLINKS)
+	$(CC) $(CFLAGS) -l$(MYLINKS) $(SOURCE) -o$(MYPROGRAM)
 
 clean:
 	rm -f $(MYPROGRAM)
