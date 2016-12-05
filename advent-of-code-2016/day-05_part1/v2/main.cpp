@@ -16,8 +16,7 @@ int main(int argc, char* argv[])
 {
     std::string input = "reyedfim";
     std::string password = "";
-    int count = 1;
-    for(;password.length() != 8;) {
+    for(int count = 1; password.length() < 8; count++) {
         std::string temp = input;
         temp += std::to_string(count);
         std::string sum = generateMD5Checksum(temp);
@@ -25,7 +24,6 @@ int main(int argc, char* argv[])
             std::cout << "Found letter: " << sum[5] << std::endl;
             password += sum[5];
         }
-        count++;
     }
     std::cout << password << "\n";
     return 0;
