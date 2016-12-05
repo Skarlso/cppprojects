@@ -17,16 +17,13 @@ int main(int argc, char* argv[])
     std::string input = "reyedfim";
     std::string password = "";
     int count = 1;
-    for(;;) {
+    for(;password.length() != 8;) {
         std::string temp = input;
         temp += std::to_string(count);
         std::string sum = generateMD5Checksum(temp);
         if (sum.substr(0, 5) == "00000") {
             std::cout << "Found letter: " << sum[5] << std::endl;
             password += sum[5];
-        }
-        if (password.length() == 8) {
-            break;
         }
         count++;
     }
