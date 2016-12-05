@@ -1,34 +1,30 @@
-#CC=g++
-#CFLAGS=-g -Wall -std=c++11 -stdlib=libc++ -L. -lcryptopp
-#SOURCES= main.cpp
-#INCLUDES= -I.
-#OBJECTS= $(SOURCES:.cpp=.o)
-#TARGET= solution
-#
-#all: $(SOURCES) $(TARGET)
-#
-#$(TARGET): $(OBJECTS)
-#	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
-#
-#.cpp.o:
-#	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
-#
-#clean:
-#	rm -rf $(OBJECTS) $(TARGET)
-#	rm -fr main.o.*
-#------------------------------------------------------------------------------
-CFLAGS=-g -Wall -std=c++14 -stdlib=libc++ -pthread
-SOURCE=main.cpp
-MYPROGRAM=solution
-MYLINKS=cryptopp
-CC=g++
-#------------------------------------------------------------------------------
-
-all: $(MYPROGRAM)
-
-$(MYPROGRAM): $(SOURCE)
-	$(CC) $(CFLAGS) -l$(MYLINKS) $(SOURCE) -o$(MYPROGRAM)
-
+CC= g++
+CFLAGS= -g -c -Wall -std=c++0x -stdlib=libc++
+LDFLAGS= -L/usr/local/opt/openssl/lib -lcrypto
+SOURCES= main.cpp
+INCLUDES= -I. -I/usr/local/opt/openssl/include
+OBJECTS= $(SOURCES:.cpp=.o)
+TARGET= solution
+all: $(SOURCES) $(TARGET)
+$(TARGET): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
 clean:
-	rm -f $(MYPROGRAM)
-	rm -fr $(MYPROGRAM).*
+	rm -rf $(OBJECTS) $(TARGET)
+#------------------------------------------------------------------------------
+# CFLAGS=-g -Wall -std=c++14 -stdlib=libc++ -pthread
+# SOURCE=main.cpp
+# MYPROGRAM=solution
+# MYLINKS=cryptopp
+# CC=g++
+# #------------------------------------------------------------------------------
+#
+# all: $(MYPROGRAM)
+#
+# $(MYPROGRAM): $(SOURCE)
+# 	$(CC) $(CFLAGS) -l$(MYLINKS) $(SOURCE) -o$(MYPROGRAM)
+#
+# clean:
+# 	rm -f $(MYPROGRAM)
+# 	rm -fr $(MYPROGRAM).*
