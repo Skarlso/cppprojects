@@ -23,7 +23,21 @@ std::string generateMD5Checksum(std::string message) {
 }
 
 int main() {
-
-    std::cout << generateMD5Checksum(input) << std::endl;
+    std::string password = "";
+    int count = 1;
+    for(;;) {
+        std::string temp = input;
+        temp += std::to_string(count);
+        auto sum = generateMD5Checksum(temp);
+        std::cout << sum.substr(0, 5) << std::endl;
+        if (sum.substr(0, 5) == "00000") {
+            password += sum[5];
+        }
+        if (password.length() == 8) {
+            break;
+        }
+        count++;
+    }
+    std::cout << password << std::endl;
     return 0;
 }
