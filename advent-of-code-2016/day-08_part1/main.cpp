@@ -5,14 +5,15 @@
 #include <vector>
 #include <map>
 #include <sstream>
+#include <stdio.h>
 
 const int WIDE = 50;
 const int TALL = 6;
 std::vector<std::vector<int>> display;
 
-void rectAxB(int a, int b) {
-    for (int i = 0; i < a; ++i)
-        for (int j = 0; j < b; ++j)
+void rectAxB(int x, int y) {
+    for (int i = 0; i < y; ++i)
+        for (int j = 0; j < x; ++j)
             display[i][j] = 1;
 }
 
@@ -55,7 +56,7 @@ void fillWithZeros() {
 void displayDisplay() {
     for (int i = 0; i < TALL; ++i) {
         for (int j = 0; j < WIDE; ++j) {
-            if (display[i][j]) {
+            if (display[i][j] == 1) {
                 std::cout << "#";
             } else {
                 std::cout << ".";
@@ -69,7 +70,7 @@ int countLit() {
     int count = 0;
     for (int i = 0; i < TALL; ++i)
         for (int j = 0; j < WIDE; ++j)
-            if (display[i][j]) {
+            if (display[i][j] == 1) {
                 count++;
             }
     return count;
@@ -85,41 +86,28 @@ int main(int argc, char* argv[]) {
         std::vector<std::string> instructions;
         boost::split(instructions, str, boost::is_any_of(" "));
         std::string action = instructions[0];
-        std::cout << action << "\n";
         if (action == "rect") {
-            int a, b;
-            std::string inst = instructions[1];
-            inst.replace(1, 1, " ");
-            std::stringstream(inst) >> a >> b;
-            // ss >> a >> b;
-            std::cout << "a: " << a << "b: " << b << "\n";
-            rectAxB(a, b);
+            int x, y;
+            char c_str[1024];
+            strcpy(c_str, instructions[1].c_str());
+            std::sscanf (c_str, "%dx%d", &x, &y);
+            rectAxB(x, y);
         } else if (action == "rotate") {
             std::string rc = instructions[1];
             if (rc == "row") {
                 int row, by;
-                // ss >> row;
-                std::string inst = instructions[2];
-                inst.replace(1, 1, " ");
-                std::stringstream(inst) >> row;
-                // ss.str(instructions[4]);
-                std::stringstream(instructions[4]) >> by;
-                std::cout << "a: " << row << "b: " << by << "\n";
+                char c_str[1024];
+                strcpy(c_str, str.c_str());
+                std::sscanf (c_str, "rotate row y=%d by %d", &row, &by);
                 rotateRow(row, by);
             } else if (rc == "column") {
                 int col, by;
-                // ss.str(instructions[2]);
-                // ss >> col;
-                std::string inst = instructions[2];
-                inst.replace(1, 1, " ");
-                std::stringstream(inst) >> col;
-                // ss.str(instructions[4]);
-                std::stringstream(instructions[4]) >> by;
-                std::cout << "col: " << col << "b: " << by << "\n";
+                char c_str[1024];
+                strcpy(c_str, str.c_str());
+                std::sscanf (c_str, "rotate column x=%d by %d", &col, &by);
                 rotateColumn(col, by);
             }
         }
     }
     displayDisplay();
-    std::cout << "Lit Pixels: " << countLit() << "\n";
 }

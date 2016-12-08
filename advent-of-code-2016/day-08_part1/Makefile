@@ -1,8 +1,8 @@
 CC= g++
 CFLAGS= -g -c -Wall -std=c++14 -stdlib=libc++
-LDFLAGS= 
+LDFLAGS=
 SOURCES= main.cpp
-INCLUDES= -I. 
+INCLUDES= -I. -I/usr/local/include
 OBJECTS= $(SOURCES:.cpp=.o)
 TARGET= solution
 all: $(SOURCES) $(TARGET)
