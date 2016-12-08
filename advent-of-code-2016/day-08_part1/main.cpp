@@ -12,16 +12,9 @@ const int TALL = 6;
 std::vector<std::vector<int>> display(TALL, std::vector<int>(WIDE, 0));
 
 void rectAxB(int x, int y) {
-    for (int i = 0; i < y; ++i) {
-        std::replace(display[i].begin(), display[i].begin()+x, 0, 1);
+    for (auto row = display.begin(); row != display.begin() + y; row++) {
+        std::replace(row->begin(), row->begin()+x, 0, 1);
     }
-}
-
-std::vector<int> createRowColumn(int l) {
-    std::vector<int> newRow;
-    for (int i = 0; i < l; ++i)
-        newRow.push_back(0);
-    return newRow;
 }
 
 void rotateRow(int row, int by) {
@@ -29,7 +22,7 @@ void rotateRow(int row, int by) {
 }
 
 void rotateColumn(int col, int by) {
-    std::vector<int> newCol = createRowColumn(TALL);
+    std::vector<int> newCol (TALL, 0);
     for (int i = 0; i < TALL; ++i) {
         int shiftedI = (i + by) % TALL;
         newCol[shiftedI] = display[i][col];
@@ -39,30 +32,15 @@ void rotateColumn(int col, int by) {
 }
 
 void displayDisplay() {
-    for (int i = 0; i < TALL; ++i) {
-        for (int j = 0; j < WIDE; ++j) {
-            if (display[i][j] == 1) {
-                std::cout << "#";
-            } else {
-                std::cout << " ";
-            }
+    for (auto row = display.begin(); row != display.end(); row++) {
+        for (auto col = row->begin(); col != row->end(); col++) {
+            *col ? std::cout << "#" : std::cout << " ";
         }
         std::cout << std::endl;
     }
 }
 
-int countLit() {
-    int count = 0;
-    for (int i = 0; i < TALL; ++i)
-        for (int j = 0; j < WIDE; ++j)
-            if (display[i][j] == 1) {
-                count++;
-            }
-    return count;
-}
-
 int main(int argc, char* argv[]) {
-    //fillWithZeros();
     std::ifstream file(argv[1]);
     std::string str;
     std::stringstream ss;
@@ -94,6 +72,6 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-    std::cout << "Lit count: " << countLit() << '\n';
+    std::cout << "Lit count: cat <<< | grep -o '#' | wc -c" << '\n';
     displayDisplay();
 }
