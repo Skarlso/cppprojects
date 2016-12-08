@@ -12,9 +12,9 @@ const int TALL = 6;
 std::vector<std::vector<int>> display(TALL, std::vector<int>(WIDE, 0));
 
 void rectAxB(int x, int y) {
-    for (int i = 0; i < y; ++i)
-        for (int j = 0; j < x; ++j)
-            display[i][j] = 1;
+    for (int i = 0; i < y; ++i) {
+        std::replace(display[i].begin(), display[i].begin()+x, 0, 1);
+    }
 }
 
 std::vector<int> createRowColumn(int l) {
