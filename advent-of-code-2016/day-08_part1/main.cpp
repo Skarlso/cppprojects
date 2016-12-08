@@ -109,5 +109,6 @@ int main(int argc, char* argv[]) {
             }
         }
     }
+    std::cout << "Lit count: " << countLit() << '\n';
     displayDisplay();
 }
