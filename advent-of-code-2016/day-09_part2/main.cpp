@@ -7,14 +7,25 @@
 #include <stdio.h>
 #include <algorithm>
 
-int decompress(std::string s, int depth) {
-    if (s.find('(') == std::string::npos) {
-        return s.length();
-    }
-    int newSize = 0;
+typedef unsigned long long verylong;
+
+verylong decompress(std::string s) {
+    ///std::cout << s << '\n';
+    //if (s.find('(') == std::string::npos) {
+    //    return s.length();
+    //}
+    verylong newSize = 0;
     for(int i = 0; i < s.length();) {
-        // Extract the () part and call this function performing this operation 
-        // decompress(head) + decompress( s.substr(head+1) );
+        if (s[i] == '(') {
+            std::string sub = s.substr(i, s.substr(i).find_first_of(')')+1);
+            int c_count, times;
+            std::sscanf(sub.c_str(), "(%dx%d)", &c_count, &times);
+            newSize += times * decompress(s.substr(i + sub.length(), c_count));
+            i += c_count + sub.length();
+        } else {
+            i++;
+            newSize++;
+        }
     }
     return newSize;
 }
@@ -25,6 +36,6 @@ int main(int argc, char* argv[]) {
     buffer << t.rdbuf();
     std::string s = buffer.str();
     boost::trim(s);
-    int newSize = decompress(s, 0);
+    verylong newSize = decompress(s);
     std::cout << "New size: " << newSize << '\n';
 }
