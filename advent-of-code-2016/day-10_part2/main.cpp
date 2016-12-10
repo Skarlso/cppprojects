@@ -59,57 +59,63 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    for(auto it = bot_distribute.begin(); it != bot_distribute.end(); ++it) {
-        int botSource, highDesID, lowDesID;
-        char lowDes[10];
-        char highDes[10];
-        std::sscanf(it->c_str(), "bot %d gives low to %s %d and high to %s %d", &botSource, lowDes, &lowDesID, highDes, &highDesID);
-        //std::printf("BotSource: %d; LowDes: %s; LowID: %d, HighDes: %s; HighID: %d \n", botSource, lowDes, lowDesID, highDes, highDesID);
+    bool done = false;
+    while (!done) {
+        done = true;
+        for(auto it = bot_distribute.begin(); it != bot_distribute.end(); ++it) {
+            int botSource, highDesID, lowDesID;
+            char lowDes[10];
+            char highDes[10];
+            std::sscanf(it->c_str(), "bot %d gives low to %s %d and high to %s %d", &botSource, lowDes, &lowDesID, highDes, &highDesID);
+            //std::printf("BotSource: %d; LowDes: %s; LowID: %d, HighDes: %s; HighID: %d \n", botSource, lowDes, lowDesID, highDes, highDesID);
 
-        if (std::string(highDes) == "output") {
-            if (outputs.find(highDesID) == outputs.end()) {
-                std::cout << "Adding output: " << highDesID << '\n';
-                output o;
-                o.id = highDesID;
-                o.chips = std::vector<chip>{};
-                outputs[highDesID] = o;
+            if (std::string(highDes) == "output") {
+                if (outputs.find(highDesID) == outputs.end()) {
+                    output o;
+                    o.id = highDesID;
+                    o.chips = std::vector<chip>{};
+                    outputs[highDesID] = o;
+                }
+            }
+            if (std::string(lowDes) == "output") {
+                if (outputs.find(lowDesID) == outputs.end()) {
+                    output o;
+                    o.id = lowDesID;
+                    o.chips = std::vector<chip>{};
+                    outputs[lowDesID] = o;
+                }
+            }
+            int high, low;
+            bot b = bots[botSource];
+            if (b.chips.size() != 2) {
+                continue;
+            }
+            std::sort(b.chips.begin(), b.chips.end(), sortChips);
+            low = b.chips[0].num;
+            high = b.chips[1].num;
+            //std::printf("Bot: %d is comparing low: %d to high: %d. \n", botSource, low, high);
+            if (std::string(lowDes) == "output") {
+                outputs[lowDesID].chips.push_back({low});
+            } else {
+                bots[lowDesID].chips.push_back({low});
+            }
+            if (std::string(highDes) == "output") {
+                outputs[highDesID].chips.push_back({high});
+            } else {
+                bots[highDesID].chips.push_back({high});
+            }
+
+            b.chips.clear();
+            bots[botSource] = b;
+        }
+        for (auto bit = bots.begin(); bit != bots.end(); ++bit) {
+            if (bit->second.chips.size() != 0) {
+                done = false;
             }
         }
-        if (std::string(lowDes) == "output") {
-            if (outputs.find(lowDesID) == outputs.end()) {
-                std::cout << "Adding output: " << lowDesID<< '\n';
-                output o;
-                o.id = lowDesID;
-                o.chips = std::vector<chip>{};
-                outputs[lowDesID] = o;
-            }
-        }
-        int high, low;
-        bot b = bots[botSource];
-        if (b.chips.size() != 2) {
-            continue;
-        }
-        std::sort(b.chips.begin(), b.chips.end(), sortChips);
-        low = b.chips[0].num;
-        high = b.chips[1].num;
-        //std::printf("Bot: %d is comparing low: %d to high: %d. \n", botSource, low, high);
-        if (std::string(lowDes) == "output") {
-            std::cout << "Low Des ID: " << lowDesID << "\n";
-            outputs[lowDesID].chips.push_back({low});
-        } else {
-            bots[lowDesID].chips.push_back({low});
-        }
-        
-        if (std::string(highDes) == "output") {
-            std::cout << "High Des ID: " << highDesID << "\n";
-            outputs[highDesID].chips.push_back({high});
-        } else {
-            bots[highDesID].chips.push_back({high});
-        }
-
-        b.chips.clear();
-        bots[botSource] = b;
     }
 
-    std::cout << "Output 0 chip count: " << outputs[0].chips.size() << '\n';
+    std::cout << "Output 0 chip count: " << outputs[0].chips[0].num << '\n';
+    std::cout << "Output 1 chip count: " << outputs[1].chips[0].num << '\n';
+    std::cout << "Output 2 chip count: " << outputs[2].chips[0].num << '\n';
 }
