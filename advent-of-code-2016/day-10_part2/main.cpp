@@ -17,7 +17,7 @@ inline bool sortChips(chip c1, chip c2) { return (c1.num < c2.num); }
 
 typedef struct output {
     std::vector<chip> chips;
-} bot, output;
+} output;
 
 int multiply(output o) {
     int res = 1;
@@ -37,7 +37,7 @@ void collectOutput(std::map<int, output> &out, int id, int value) {
     out[id].chips.push_back({value});
 }
 
-void performSwaps(std::vector<std::string> swaps, std::map<int, output> &outs, std::map<int, bot> &bots) {
+void performSwaps(std::vector<std::string> swaps, std::map<int, output> &outs, std::map<int, output> &bots) {
     bool done = false;
     while (!done) {
         done = true;
@@ -48,7 +48,7 @@ void performSwaps(std::vector<std::string> swaps, std::map<int, output> &outs, s
             std::sscanf(it->c_str(), "bot %d gives low to %s %d and high to %s %d", &botSource, lowDes, &lowDesID, highDes, &highDesID);
             
             int high, low;
-            bot b = bots[botSource];
+            output b = bots[botSource];
             if (b.chips.size() != 2) {
                 continue;
             }
@@ -58,12 +58,12 @@ void performSwaps(std::vector<std::string> swaps, std::map<int, output> &outs, s
             if (std::string(lowDes) == "output") {
                 collectOutput(outs, lowDesID, low);
             } else {
-                bots[lowDesID].chips.push_back({low});
+                collectOutput(bots, lowDesID, low);
             }
             if (std::string(highDes) == "output") {
                 collectOutput(outs, highDesID, high);
             } else {
-                bots[highDesID].chips.push_back({high});
+                collectOutput(bots, highDesID, high);
             }
 
             b.chips.clear();
@@ -81,7 +81,7 @@ void performSwaps(std::vector<std::string> swaps, std::map<int, output> &outs, s
 int main(int argc, char* argv[]) {
     std::ifstream file(argv[1]);
     std::string s;
-    std::map<int, bot> bots;
+    std::map<int, output> bots;
     std::vector<std::string> bot_distribute;
     std::map<int, output> outputs;
     while (std::getline(file, s)) {
@@ -91,13 +91,7 @@ int main(int argc, char* argv[]) {
         if (split[0] == "value") {
             int value, botID;
             std::sscanf(s.c_str(), "value %d goes to bot %d", &value, &botID);
-            // This is basically the same as collectOutput.
-            if (bots.find(botID) == bots.end()) { 
-                bot b;
-                b.chips = std::vector<chip>{};
-                bots[botID] = b;
-            }
-            bots[botID].chips.push_back({value});
+            collectOutput(bots, botID, value);
         } else if (split[0] == "bot") {
             bot_distribute.push_back(s);
         }
