@@ -67,6 +67,15 @@ int main(int argc, char* argv[]) {
 
 
     for(auto it = bot_distribute.begin(); it != bot_distribute.end(); ++it) {
+        if (*it.find("output")) {
+            
+        } else {
+            int botSource, botHigh, botLow;
+            std::sscanf(s.c_str(), "bot %d gives low to bot %d and high to bot %d", &botSource, &botLow, &botHigh);
+            // I'm assuming here that botSource exists, ERIC.
+            // Perform Compare operation here, and give save which chip was compared to which by what bot.
+        }
+
         std::cout << *it << '\n';
     }
 }
