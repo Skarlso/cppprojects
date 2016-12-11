@@ -1,17 +1,14 @@
-#------------------------------------------------------------------------------
-CFLAGS=-g -Wall -std=c++11 -stdlib=libc++ -pthread
-SOURCE=src/totp.cpp
-MYPROGRAM=totp
-MYLIBS=lib
-MYLINKS=cryptopp
-CC=g++
-#------------------------------------------------------------------------------
-
-all: $(MYPROGRAM)
-
-$(MYPROGRAM): $(SOURCE)
-	$(CC) $(CFLAGS) -L$(MYLIBS) $(SOURCE) -o$(MYPROGRAM) -l$(MYLINKS)
-
+CC= g++
+CFLAGS= -g -c -Wall -std=c++14 -stdlib=libc++
+LDFLAGS= -L/usr/local/opt/openssl/lib -lcrypto
+SOURCES= src/totp.cpp
+INCLUDES= -I. -I/usr/local/opt/openssl/include
+OBJECTS= $(SOURCES:.cpp=.o)
+TARGET= totp 
+all: $(SOURCES) $(TARGET)
+$(TARGET): $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
 clean:
-	rm -f $(MYPROGRAM)
-	rm -fr $(MYPROGRAM).*
+	rm -rf $(OBJECTS) $(TARGET)

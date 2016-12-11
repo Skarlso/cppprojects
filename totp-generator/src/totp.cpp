@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include "cryptopp/hmac.h"
+#include "openssl/hmac.h"
 
 using std::string;
 using std::cout;
@@ -17,7 +17,6 @@ int main(int argc, char* argv[]) {
     string token = argv[1];
     unsigned char tokenChar[sizeof(token)];
     // strcpy(static_cast <char*>(tokenChar), token);
-    CryptoPP::BitReverse(12);
     copy(token.begin(), token.end(), tokenChar);
     cout << tokenChar << "\n";
 }
