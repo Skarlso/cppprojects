@@ -11,7 +11,6 @@ using std::vector;
 using std::cout;
 using std::endl;
 
-//std::map<std::string, int> registers = {{"a", 0}, {"b", 0}, {"c", 0}, {"d", 0}};
 std::map<std::string, int> registers = {{"a", 0}, {"b", 0}, {"c", 1}, {"d", 0}};
 // std::map<std::string, Have here a map of instr<function> -> with lambda.
 
@@ -31,7 +30,8 @@ int main(int argc, char* argv[]) {
         if (it->at(0) == "cpy") {
             string reg = it->at(2);
             int value = 0;
-            if (registers.find(it->at(1)) != registers.end()) {
+            string src = it->at(1);
+            if (src == "a" || src == "b" || src == "c" || src == "d") {
                 value = registers[it->at(1)];
             } else {
                 value = std::atoi(it->at(1).c_str());
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
         } else if (it->at(0) == "jnz") {
             string reg = it->at(1);
             int value = std::atoi(it->at(2).c_str());
-            if (registers.find(reg) != registers.end()) {
+            if (reg == "a" || reg == "b" || reg == "c" || reg == "d") {
                 if (registers[reg] > 0) {
                     std::advance(it, value);
                     continue;
