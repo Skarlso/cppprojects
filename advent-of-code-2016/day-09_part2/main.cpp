@@ -10,10 +10,6 @@
 typedef unsigned long long verylong;
 
 verylong decompress(std::string s) {
-    ///std::cout << s << '\n';
-    //if (s.find('(') == std::string::npos) {
-    //    return s.length();
-    //}
     verylong newSize = 0;
     for(int i = 0; i < s.length();) {
         if (s[i] == '(') {

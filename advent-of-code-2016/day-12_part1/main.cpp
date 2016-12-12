@@ -32,9 +32,9 @@ int main(int argc, char* argv[]) {
             int value = 0;
             string src = it->at(1);
             if (src == "a" || src == "b" || src == "c" || src == "d") {
-                value = registers[it->at(1)];
+                value = registers[src];
             } else {
-                value = std::atoi(it->at(1).c_str());
+                value = std::atoi(src.c_str());
             }
             registers[reg] = value;
         } else if (it->at(0) == "jnz") {
