@@ -73,6 +73,9 @@ int main() {
     while (std::find(mPath.begin(), mPath.end(), goal) == mPath.end()) {
         mPath = move(mPath);
         stepCount++;
+        if (stepCount == 50) {
+            cout << "Distinct loc: " << alreayVisited.size() << endl;
+        }
     }
     cout << "Step Count: " << stepCount << endl;
     return 0;
