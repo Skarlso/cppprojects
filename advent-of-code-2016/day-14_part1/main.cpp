@@ -1,11 +1,14 @@
 #include <openssl/md5.h>
 #include <string>
 #include <iostream>
+#include <map>
 
 using std::string;
 
 const string input = "zpqevtbw";
 //const string input = "abc";
+
+std::map<int, string> memo;
 
 string generateMD5Checksum(string input) {
     unsigned char digest[MD5_DIGEST_LENGTH];
@@ -36,7 +39,13 @@ bool checkNextThousandHashes(char c, int num) {
     for (int i = 0; i < 1000; ++i) {
         string temp = input;
         temp += std::to_string(inc);
-        string sum = generateMD5Checksum(temp);
+        string sum;
+        if (memo.count(inc) == 1) {
+            sum = memo[inc];
+        } else {
+            sum = generateMD5Checksum(temp);
+            memo[inc] = sum;
+        }
         if (checkQuadruplet(c, sum)) {
             return true;
         }
@@ -58,8 +67,10 @@ char checkTriplet(string sum) {
 }
 
 bool validateHash(string sum, int num) {
+
     char c = checkTriplet(sum);
     if (c != '!') {
+        // Checking memo;
         return checkNextThousandHashes(c, num);
     }
     return false; 
@@ -76,13 +87,12 @@ int main(int argc, char* argv[])
         string sum = generateMD5Checksum(temp);
         if (validateHash(sum, num)) {
             padkeycount++;
-            if (padkeycount == 64) {
-                std::cout << "64th hash index is: " << num << std::endl;
-                done = true;
-            }
+        }
+        if (padkeycount == 64) {
+            std::cout << "64th hash index is: " << num << std::endl;
+            done = true;
         }
         num++;
     }
-
     return 0;
 }
