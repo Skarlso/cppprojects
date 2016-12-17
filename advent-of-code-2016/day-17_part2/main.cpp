@@ -61,10 +61,12 @@ vector<coordinates> allMoves(int x, int y, string paths) {
 
 int main() {
     // gather all the valid paths here which lead to the goal coordinate x, y.
-    vector<coordinates> validPaths;
-    // We save all the valid paths in the stack and begin walking it by pops.
+    vector<string> validPaths;
+    // We save all the valid paths in the stack and begin taking them out until we find
+    // one path which lead to the goal coordinates. If that is found, we save it in 
+    // validPaths.
     stack<coordinates> allPaths;
-    // we begin from 0, 0.
+    // we begin from 0, 0 and an empty Path.
     allPaths.push({0, 0, ""});
     // We search until the stack is empty, meaning there are no more paths left to go on.
     while(!allPaths.empty()) {
@@ -72,23 +74,20 @@ int main() {
         coordinates currentPath = allPaths.top();
         allPaths.pop();
         // The path doesn't lead to the goal, so we generate
-        // possible moves from the current location.
+        // possible moves from the current location and save it in path.
         if (currentPath.x == 3 && currentPath.y == 3) {
             // the path lead to the goal, we save the path.
-            validPaths.push_back(currentPath);
+            validPaths.push_back(currentPath.path);
             continue;
         }
-        // current location (0, 0) -> possible moves from zero, zero are ->
-        // since the path is always appended, we gather all the steps until
-        // we arrive at the goal.
         vector<coordinates> directions = allMoves(currentPath.x, currentPath.y, currentPath.path);
         for(auto it = directions.begin(); it != directions.end(); ++it) {
             // we push all the possible moves from 0, 0 into the stack.
             allPaths.push(*it);
         }
     }
-    std::sort(validPaths.begin(), validPaths.end());
-    cout << "Longest Path Length: " << validPaths.back().path.length() << endl;
+    std::sort(validPaths.begin(), validPaths.end(), [](string s1, string s2){return s1.length() < s2.length();});
+    cout << "Longest Path Length: " << validPaths.back().length() << endl;
 
     return 0;
 }

@@ -18,13 +18,6 @@ using std::stack;
 typedef struct coordinates {
     int x, y;
     string path;
-    bool operator<(coordinates other) const {
-        return path.length() < other.path.length();
-    }
-    
-    bool operator==(coordinates other) const {
-        return path.length() == other.path.length();
-    }
 } coordinates;
 
 const string INPUT = "hhhxzeay";
@@ -59,14 +52,14 @@ vector<coordinates> allMoves(int x, int y, string paths) {
 }
 
 int main() {
-    vector<coordinates> validPaths;
+    vector<string> validPaths;
     stack<coordinates> allPaths;
     allPaths.push({0, 0, ""});
     while(!allPaths.empty()) {
         coordinates currentPath = allPaths.top();
         allPaths.pop();
         if (currentPath.x == 3 && currentPath.y == 3) {
-            validPaths.push_back(currentPath);
+            validPaths.push_back(currentPath.path);
             continue;
         }
         vector<coordinates> directions = allMoves(currentPath.x, currentPath.y, currentPath.path);
@@ -74,7 +67,7 @@ int main() {
             allPaths.push(*it);
         }
     }
-    std::sort(validPaths.begin(), validPaths.end());
-    cout << "First valid path: " << validPaths.front().path << endl;
+    std::sort(validPaths.begin(), validPaths.end(), [](string s1, string s2){return s1.length() < s2.length();});
+    cout << "First valid path: " << validPaths.front() << endl;
     return 0;
 }
