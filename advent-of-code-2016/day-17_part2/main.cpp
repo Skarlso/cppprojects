@@ -56,6 +56,11 @@ vector<coordinates> allMoves(int x, int y, string paths) {
     if (y < 3 && openedDoors.find(md5[1]) != string::npos) {
         ret.push_back({x, y + 1, paths + 'D'});
     }
+    for(auto it = ret.begin(); it != ret.end(); ++it) {
+        printf("x: %d, y: %d, path: %s", it->x, it->y, it->path.c_str());
+    }
+    int n;
+    std::cin >> n;
     return ret;
 }
 
@@ -80,6 +85,9 @@ int main() {
             validPaths.push_back(currentPath.path);
             continue;
         }
+        // The Path accumulates here with valid moves which are then taken one - by - one
+        // through the stack's pop operation. Saving the new X, Y, and the accumulated path
+        // so far.
         vector<coordinates> directions = allMoves(currentPath.x, currentPath.y, currentPath.path);
         for(auto it = directions.begin(); it != directions.end(); ++it) {
             // we push all the possible moves from 0, 0 into the stack.
