@@ -6,26 +6,28 @@ using std::cout;
 
 const int ELFS = 3001330;
 
-int getTheElfWithTheNextPresent(vector<int> circle, int from) {
+int getTheElfWithTheNextPresent(bool circle[ELFS], int from) {
     int elf = -1;
-    for (int i = from + 1; i != from;) {
-        if (circle[i] > 0) {
+    int i = (from + 1) % ELFS;
+    for (;i != from;) {
+        if (circle[i]) {
             elf = i;
+            break;
         }
 
-        i = (i + 1) % circle.size();
+        i = (i + 1) % ELFS;
     }
 
     return elf;
 }
 
 int main() {
-    vector<int> presentCicrle;
+    bool presentCicrle[ELFS];
 
     for (int i = 0; i < ELFS; ++i) {
-        presentCicrle.push_back(1);
+        presentCicrle[i] = true;
     }
-    cout << "Present size: " << presentCicrle.size() << '\n';
+    cout << "Present size: " << ELFS << '\n';
     bool moreThanOneElfHasPresents = true;
     int theElfWithTheMostPresent = 0;
     while(moreThanOneElfHasPresents) {
@@ -33,19 +35,18 @@ int main() {
             if (presentCicrle[i] == 0) {
                 continue;
             }
-            
             int nextElf = getTheElfWithTheNextPresent(presentCicrle, i);
             if (nextElf == -1) {
                 theElfWithTheMostPresent = i;
                 moreThanOneElfHasPresents = false;
-                break;    
+                break;
             }
-            presentCicrle[i] += presentCicrle[nextElf];
-            presentCicrle[nextElf] = 0;
+            presentCicrle[i] = true;
+            presentCicrle[nextElf] = false;
         }
     }
     //for (int i = 0; i < presentCicrle.size(); ++i) {
     //    cout << "I: " << presentCicrle[i] << '\n';
     //}
-    cout << "The elf with the most present: " << theElfWithTheMostPresent << '\n';
+    cout << "The elf with the most present: " << theElfWithTheMostPresent+1 << '\n';
 }
