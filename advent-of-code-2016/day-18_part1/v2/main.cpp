@@ -11,56 +11,60 @@ using std::vector;
 const string begin = ".^^^.^.^^^.^.......^^.^^^^.^^^^..^^^^^.^.^^^..^^.^.^^..^.^..^^...^.^^.^^^...^^.^.^^^..^^^^.....^....";
 const string test = ".^^.^.^^^^";
 vector<vector<int>> traps = {
-    {{1}, {1}, {0}},
-    {{0}, {1}, {1}},
-    {{1}, {0}, {0}},
-    {{0}, {0}, {1}}
+    {0, 0, 1},
+    {1, 0, 0},
+    {0, 1, 1},
+    {1, 1, 0}
 };
 
 vector<int> getNextRow(vector<int> current_row) {
     vector<int> next_row;
-    for (int i = 0; i < current_row.length(); ++i) {
-        string to_check = "";
+    for (int i = 0; i < current_row.size(); ++i) {
+        vector<int> to_check;
         if (i == 0) {
-            to_check += '.';
-            to_check += current_row.at(i);
-            to_check += current_row.at(i+1);
-        } else if (i + 1 == current_row.length()) {
-            to_check += current_row.at(i-1);
-            to_check += current_row.at(i);
-            to_check += '.';
+            to_check.push_back(1);
+            to_check.push_back(current_row.at(i));
+            to_check.push_back(current_row.at(i+1));
+        } else if (i + 1 == current_row.size()) {
+            to_check.push_back(current_row.at(i-1));
+            to_check.push_back(current_row.at(i));
+            to_check.push_back(1);
         } else {
-            to_check += current_row.at(i-1);
-            to_check += current_row.at(i);
-            to_check += current_row.at(i+1);
+            to_check.push_back(current_row.at(i-1));
+            to_check.push_back(current_row.at(i));
+            to_check.push_back(current_row.at(i+1));
         }
-        if (std::find(traps.begin(), traps.end(), to_check) == traps.end()) {
-            next_row += '.';
-        } else {
-            next_row += '^';
+        bool t = false;
+        for (auto it = traps.begin(); it != traps.end(); ++it) {
+            if (to_check == *it) {
+                t = true;
+            }
         }
+        t ? next_row.push_back(0) : next_row.push_back(1);
     }
     return next_row;
 }
 
 int main() {
-    vector<vector<int>> traps;
+    vector<vector<int>> alltraps;
+    vector<int> row;
     for (auto it = begin.begin(); it != begin.end(); ++it) {
-        vector<int> row;
         if (*it == '.') {
-            row.push_back(0);
-        } else {
             row.push_back(1);
+        } else {
+            row.push_back(0);
         }
     }
-    traps.push_back(begin);
+    alltraps.push_back(row);
+    std::cout << "Starting to Generate field." << '\n';
     for(int i = 0; i < BOUNDRY_P2 - 1; ++i) {
-        traps.push_back(getNextRow(traps.at(i)));
+        alltraps.push_back(getNextRow(alltraps.at(i)));
     }
+    std::cout << "Generated field." << '\n';
     int safe = 0;
-    for(auto it = traps.begin(); it != traps.end(); ++it) {
+    for(auto it = alltraps.begin(); it != alltraps.end(); ++it) {
         for(auto s = it->begin(); s != it->end(); ++s) {
-            if (*s == '.') safe++;
+            safe += *s;
         }
     }
     std::cout << "Safe places: " << safe << '\n';
