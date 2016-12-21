@@ -52,7 +52,6 @@ int main(int argc, char* argv[]) {
     string goal = argv[3];
     string s;
     int count = 0;
-    bool notfound = true;
     vector<string> instructions;
     while (std::getline(file, s)) {
         count++;
@@ -62,6 +61,7 @@ int main(int argc, char* argv[]) {
     string str = start;
     string origin = str;
     do {
+        str = origin;
         for (auto it = instructions.begin(); it != instructions.end(); ++it) {
             vector<string> split;
             boost::split(split, *it, boost::is_any_of(" "));
@@ -102,11 +102,8 @@ int main(int argc, char* argv[]) {
         // std::cout << str << '\n';
         if (str == goal) {
             std::cout << "Found: " << str << '\n';
-            notfound = false;
             break;
         }
-        std::next_permutation(origin.begin(), origin.end());
-        str = origin;
-    } while (notfound);
+    } while (std::next_permutation(origin.begin(), origin.end()));
     return 0;
 }
