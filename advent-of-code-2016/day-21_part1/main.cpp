@@ -20,7 +20,7 @@ void swapByCharacter(string& s, char a, char b) {
 }
 
 void reverseString(string& s, int from, int until) {
-    std::reverse(s.begin()+from, s.begin()+until+1);
+    std::reverse(s.begin()+from, s.begin()+until);
 }
 
 void rotateLeft(string& s, int by) {
