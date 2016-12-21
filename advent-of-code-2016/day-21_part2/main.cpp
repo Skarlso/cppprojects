@@ -9,6 +9,12 @@
 using std::string;
 using std::vector;
 
+typedef struct command {
+    string action;
+    string subcommand;
+    string raw;
+} command;
+
 void swapByIndex(string& s, int from, int to) {
     std::swap(s[from], s[to]);
 }
@@ -52,49 +58,49 @@ int main(int argc, char* argv[]) {
     string goal = argv[3];
     string s;
     int count = 0;
-    vector<string> instructions;
+    vector<command> instructions;
     while (std::getline(file, s)) {
         count++;
         boost::trim(s);
-        instructions.push_back(s);
+        vector<string> split;
+        boost::split(split, s, boost::is_any_of(" "));
+        instructions.push_back({split[0], split[1], s});
     }
     string origin = start;
     do {
         string str = origin;
         for (auto it = instructions.begin(); it != instructions.end(); ++it) {
-            vector<string> split;
-            boost::split(split, *it, boost::is_any_of(" "));
-            if (split[0] == "rotate") {
-                if (split[1] == "right") {
+            if (it->action == "rotate") {
+                if (it->subcommand == "right") {
                     int by;
-                    std::sscanf(it->c_str(), "rotate right %d steps", &by);
+                    std::sscanf(it->raw.c_str(), "rotate right %d steps", &by);
                     rotateRight(str, by);
-                } else if (split[1] == "left") {
+                } else if (it->subcommand == "left") {
                     int by;
-                    std::sscanf(it->c_str(), "rotate left %d steps", &by);
+                    std::sscanf(it->raw.c_str(), "rotate left %d steps", &by);
                     rotateLeft(str, by);
-                } else if (split[1] == "based") {
+                } else if (it->subcommand == "based") {
                     char a;
-                    std::sscanf(it->c_str(), "rotate based on position of letter %c", &a);
+                    std::sscanf(it->raw.c_str(), "rotate based on position of letter %c", &a);
                     rotateBasedOnCharacter(str, a);
                 }
-            } else if (split[0] == "swap") {
-                if (split[1] == "position") {
+            } else if (it->action == "swap") {
+                if (it->subcommand == "position") {
                     int x, y;
-                    std::sscanf(it->c_str(), "swap position %d with position %d", &x, &y);
+                    std::sscanf(it->raw.c_str(), "swap position %d with position %d", &x, &y);
                     swapByIndex(str, x, y);
-                } else if (split[1] == "letter") {
+                } else if (it->subcommand == "letter") {
                     char a, b;
-                    std::sscanf(it->c_str(), "swap letter %c with letter %c", &a, &b);
+                    std::sscanf(it->raw.c_str(), "swap letter %c with letter %c", &a, &b);
                     swapByCharacter(str, a, b);
                 }
-            } else if (split[0] == "reverse") {
+            } else if (it->action == "reverse") {
                 int x, y;
-                std::sscanf(it->c_str(), "reverse positions %d through %d", &x, &y);
+                std::sscanf(it->raw.c_str(), "reverse positions %d through %d", &x, &y);
                 reverseString(str, x, y);
-            } else if (split[0] == "move") {
+            } else if (it->action == "move") {
                 int x, y;
-                std::sscanf(it->c_str(), "move position %d to position %d", &x, &y);
+                std::sscanf(it->raw.c_str(), "move position %d to position %d", &x, &y);
                 move(str, x, y);
             }
         }
