@@ -37,7 +37,7 @@ void rotateBasedOnCharacter(string& s, char a) {
         a2++;
     }
     a2 %= s.length();
-    std::rotate(s.begin(), s.begin()+a2+1, s.end());
+    std::rotate(s.rbegin(), s.rbegin()+a2+1, s.rend());
 }
 
 void move(string& s, int x, int y) {
@@ -58,10 +58,9 @@ int main(int argc, char* argv[]) {
         boost::trim(s);
         instructions.push_back(s);
     }
-    string str = start;
-    string origin = str;
+    string origin = start;
     do {
-        str = origin;
+        string str = origin;
         for (auto it = instructions.begin(); it != instructions.end(); ++it) {
             vector<string> split;
             boost::split(split, *it, boost::is_any_of(" "));
@@ -99,9 +98,8 @@ int main(int argc, char* argv[]) {
                 move(str, x, y);
             }
         }
-        // std::cout << str << '\n';
         if (str == goal) {
-            std::cout << "Found: " << str << '\n';
+            std::cout << "Found: " << origin << '\n';
             break;
         }
     } while (std::next_permutation(origin.begin(), origin.end()));
