@@ -1,43 +1,54 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
-#include <stdio.h>
 
 using std::vector;
 using std::cout;
 
-typedef struct elf {
-    int index;
-    bool present;
-} elf;
+//const int ELFS = 3001330;
+const int ELFS = 5;
 
-const int ELFS = 3001330;
-// const int ELFS = 5;
+int getTheElfWithTheNextPresent(bool circle[ELFS], int from) {
+    int elf = -1;
+    int i = (from + int(floor(ELFS/2))) % ELFS;
+    for (;i != from;) {
+        if (circle[i]) {
+            elf = i;
+            break;
+        }
+
+        i = (i + 1) % ELFS;
+    }
+
+    return elf;
+}
 
 int main() {
-    vector<elf> presentCircle;
+    bool presentCicrle[ELFS];
 
     for (int i = 0; i < ELFS; ++i) {
-        presentCircle.push_back({i+1, true});
+        presentCicrle[i] = true;
     }
-    int i = 0;
-    while(presentCircle.size() > 1) {
-        int nextElf = (i + int(floor(presentCircle.size()/2))) % presentCircle.size();
-        //printf("Next Elf index is: %d\n", nextElf);
-        presentCircle.erase(presentCircle.begin()+nextElf);
-
-        if (nextElf < i) {
-            i = i % presentCircle.size();
-        } else {
-            i = (i + 1) % presentCircle.size();
+    cout << "Present size: " << ELFS << '\n';
+    bool moreThanOneElfHasPresents = true;
+    int theElfWithTheMostPresent = 0;
+    while(moreThanOneElfHasPresents) {
+        for (int i = 0; i < ELFS; ++i) {
+            if (!presentCicrle[i]) {
+                continue;
+            }
+            int nextElf = getTheElfWithTheNextPresent(presentCicrle, i);
+            if (nextElf == -1) {
+                theElfWithTheMostPresent = i;
+                moreThanOneElfHasPresents = false;
+                break;
+            }
+            presentCicrle[i] = true;
+            presentCicrle[nextElf] = false;
         }
-        if (presentCircle.size() % 1000 == 0) {
-            cout << "Vector size: " << presentCircle.size() << '\n'; 
-        }
-        //printf("Next index: %d\n", i);
     }
-    for (int i = 0; i < presentCircle.size(); ++i) {
-        cout << "I: " << presentCircle[i].index << '\n';
-    }
-    cout << "===============" << '\n';
+    //for (int i = 0; i < presentCicrle.size(); ++i) {
+    //    cout << "I: " << presentCicrle[i] << '\n';
+    //}
+    cout << "The elf with the most present: " << theElfWithTheMostPresent+1 << '\n';
 }
