@@ -40,38 +40,39 @@ void move(string& s, int x, int y) {
 int main(int argc, char* argv[]) {
     std::ifstream file(argv[1]);
     string str = "abcdefgh";
-    while (std::getline(file, str)) {
-        boost::trim(str);
+    string s;
+    while (std::getline(file, s)) {
+        boost::trim(s);
         vector<string> split;
-        boost::split(split, str, boost::is_any_of(" "));
+        boost::split(split, s, boost::is_any_of(" "));
 
         if (split[0] == "rotate") {
             if (split[1] == "right") {
                 int by;
-                std::sscanf("rotate right %d steps", &by);
+                std::sscanf(s.c_str(), "rotate right %d steps", &by);
                 rotateRight(str, by);
             } else if (split[1] == "left") {
                 int by;
-                std::sscanf("rotate left %d steps", &by);
+                std::sscanf(s.c_str(), "rotate left %d steps", &by);
                 rotateLeft(str, by);
             }
         } else if (split[0] == "swap") {
             if (split[1] == "position") {
                 int x, y;
-                std::sscanf("swap position %d with position %d", &x, &y);
+                std::sscanf(s.c_str(), "swap position %d with position %d", &x, &y);
                 swapByIndex(str, x, y);
             } else if (split[1] == "letter") {
                 char a, b;
-                std::sscanf("swap letter %s with letter %s", &a, &b);
+                std::sscanf(s.c_str(), "swap letter %s with letter %s", &a, &b);
                 swapByCharacter(str, a, b);
             }
         } else if (split[0] == "reverse") {
             int x, y;
-            std::sscanf("reverse positions %d through %d", &x, &y);
+            std::sscanf(s.c_str(), "reverse positions %d through %d", &x, &y);
             reverseString(str, x, y);
         } else if (split[0] == "move") {
             int x, y;
-            std::sscanf("move position %d to position %d", &x, &y);
+            std::sscanf(s.c_str(), "move position %d to position %d", &x, &y);
             move(str, x, y);
         }
     }
