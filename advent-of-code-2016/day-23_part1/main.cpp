@@ -28,13 +28,18 @@ int main(int argc, char* argv[]) {
         boost::split(split, str, boost::is_any_of(" "));
         instructions.push_back(split);
     }
-
+    int atInst = 0;
     for (auto it = instructions.begin(); it != instructions.end();) {
-        // std::cout << "=========" << "\n";
+        // std::cout << "========= I: " << atInst << " =========" << "\n";
         // for (auto insts = instructions.begin(); insts != instructions.end(); ++insts)
         // {
         //     std::cout << insts->at(0) << "\n";
         // }
+        // if (it->at(0) == "tgl") {
+        //     std::cout << "TOOOOOGLLL" << "\n";
+        // }
+        // int n;
+        // std::cin >> n;
         if (it->at(0) == "cpy") {
             string reg = it->at(2);
             string src = it->at(1);
@@ -43,19 +48,26 @@ int main(int argc, char* argv[]) {
                 registers[reg] = value;
             } else {
                 ++it;
+                ++atInst;
                 continue;
             }
         } else if (it->at(0) == "jnz") {
+            // std::cout << "JUMPING by: " << it->at(2) << " With reg: " << it->at(1) << "\n";
             int reg = int_or_reg(it->at(1));
             int value = int_or_reg(it->at(2));
+            // std::cout << "Values by: " << value << " With reg: " << reg << "\n";
             // if (reg == "a" || reg == "b" || reg == "c" || reg == "d") {
-            // std::cout << "JUMPING by: " << value << "\n";
             if (reg > 0) {
-                if (value > instructions.size()) {
+                auto nxt = it;
+                if (value > 0) nxt = std::next(it, value);
+                if (value < 0) nxt = std::prev(it, std::abs(value));
+                if (nxt == instructions.end()) {
                     ++it;
+                    ++atInst;
                     continue;
                 }
                 std::advance(it, value);
+                atInst += value;
                 continue;
             }
         } else if (it->at(0) == "inc") {
@@ -66,26 +78,29 @@ int main(int argc, char* argv[]) {
             registers[reg]--;
         } else if (it->at(0) == "tgl") {
             int value = int_or_reg(it->at(1));
-            if (value > instructions.size()) {
-                ++it;
-                continue;
-            }
             auto nxt = it;
             if (value > 0) nxt = std::next(it, value);
             if (value < 0) nxt = std::prev(it, std::abs(value));
-            string inst = nxt->at(0);
-            if (inst == "dec" || inst == "tgl") {
-                inst = "inc";
-            } else if (inst == "inc") {
-                inst = "dec";
-            } else if (inst == "jnz") {
-                inst = "cpy";
-            } else if (inst == "cpy") {
-                inst = "jnz";
+            if (nxt == instructions.end()) {
+                ++it;
+                ++atInst;
+                continue;
             }
-            nxt->at(0) = inst;
+            string inst = nxt->at(0);
+            string newinst = "";
+            if (inst == "dec" || inst == "tgl") {
+                newinst = "inc";
+            } else if (inst == "inc") {
+                newinst = "dec";
+            } else if (inst == "jnz") {
+                newinst = "cpy";
+            } else if (inst == "cpy") {
+                newinst = "jnz";
+            }
+            nxt->at(0) = newinst;
         }
         ++it;
+        atInst++;
     }
 
     cout << "a: " << registers["a"] << " b: " << registers["b"] << " c: " << registers["c"] << " d: " << registers["d"] << endl;
