@@ -1,6 +1,6 @@
 #include <vector>
-#include <iostream>
 #include <stdio.h>
+#include <math.h>
 
 class BuyCar
 {
@@ -11,23 +11,26 @@ class BuyCar
 // nbMonths
 std::vector<int> BuyCar::nbMonths(int startPriceOld, int startPriceNew, int savingperMonth, double percentLossByMonth)
 {
-    // month & 1 == 0 -> increase loss percentage.
-    // how many months 'till he can buy the car and how much money will be left over.
-    std::vector<int> ret;
-
-    if (startPriceOld >= startPriceNew) {
-        ret.push_back(0);
-        ret.push_back(startPriceOld - startPriceNew);
-        return ret;
+    printf("StartOld: %d StartNew: %d savingPerMonth: %d Percentage: %f\n", startPriceOld, startPriceNew, savingperMonth, percentLossByMonth);
+    int currentMonthSave = 0;
+    int month = 0;
+    double currentOldCarPrice = startPriceOld;
+    double currentNewCarPrice = startPriceNew;
+    while ((currentOldCarPrice + currentMonthSave) < currentNewCarPrice) {
+        currentOldCarPrice -= (currentOldCarPrice / 100) * percentLossByMonth;
+        currentNewCarPrice -= (currentNewCarPrice / 100) * percentLossByMonth;
+        if ((month & 1) == 0) percentLossByMonth += 0.5;
+        month++;
+        currentMonthSave += savingperMonth;
     }
-
-    return ret;
+    int result = round(currentOldCarPrice + currentMonthSave - currentNewCarPrice);
+    return {month, result};
 }
 
 int main(int argc, char* argv[])
 {
     BuyCar buyCar;
-    std::vector<int> result = buyCar.nbMonths(12000, 8000, 1000, 1.5);
+    std::vector<int> result = buyCar.nbMonths(1358, 11358, 1000, 1);
     printf("Saving: %d Month: %d\n", result[1], result[0]);
 
     return 0;
