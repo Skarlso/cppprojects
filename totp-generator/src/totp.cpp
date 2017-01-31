@@ -2,6 +2,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <openssl/hmac.h>
+#include <string>
+#include <ctime>
+#include <cmath>
+#include "base64.h"
+
+using std::string;
+
+string generateOTPToken(string token, std::time_t t) {
+    int timer = int(floor(t/30));
+    printf("Time: %d\n", timer);
+    string decoded = base64_decode("YXNkZg==");
+    printf("Decoded: %s\n", decoded.c_str());
+    return "";
+}
 
 int main()
 {
@@ -24,6 +38,9 @@ int main()
          sprintf(&mdString[i*2], "%02x", (unsigned int)digest[i]);
 
     printf("HMAC digest: %s\n", mdString);
+
+    std::time_t result = std::time(nullptr);
+    generateOTPToken("anyad", result); 
 
     return 0;
 }
